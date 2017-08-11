@@ -2,7 +2,6 @@ package com.ai.cwf.swipeback.swipeback;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -58,13 +57,14 @@ public class BaseGestureUtil {
         initGestureDetector();
         // 获取根布局，用于右滑关闭
         rootView = activity.getWindow().getDecorView();
-        rootView.setBackgroundColor(Color.TRANSPARENT);
     }
 
     public void setBeforeActivity(SwipeBackActivity activity) {
-        this.beforeRootView = activity.getWindow().getDecorView();
-        this.beforeRootView.setVisibility(View.VISIBLE);
-        this.beforeRootView.setBackgroundColor(Color.WHITE);
+        if (beforeRootView == null) {
+            this.beforeRootView = activity.getWindow().getDecorView();
+            Log.e("test", activity.getClass().getSimpleName() + " setBeforeActivity: " + activity.getWindow().getDecorView().getVisibility()
+                    + ":" + activity.getWindow().findViewById(android.R.id.content).getVisibility());
+        }
     }
 
 
@@ -168,13 +168,11 @@ public class BaseGestureUtil {
                 // 计算滑动距离
                 float move = nowX > startX ? nowX - startX : 0;
                 // 更新界面位置
+                float moveBefore = move - phoneInfo.getPhoneWidth() + 10;
                 rootView.setX(move);
                 if (beforeRootView != null) {
-//                    Log.e("test", "BY:" + beforeRootView.getVisibility());
-//                    if(beforeRootView.getVisibility()!=View.VISIBLE){
-//                        beforeRootView.setVisibility(View.VISIBLE);
-//                    }
-                    beforeRootView.setX(move - phoneInfo.getPhoneWidth() + 10);
+                    Log.e("test", "BY:" + beforeRootView.getVisibility());
+                    beforeRootView.setX(moveBefore);
                 }
                 return true;
 

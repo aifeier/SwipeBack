@@ -1,13 +1,14 @@
 package com.ai.cwf.swipeback.swipeback;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,9 +60,31 @@ public class SwipeBackActivity extends AppCompatActivity {
         activityList.remove(this);
         super.finish();
         if (isAnim) {
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+//            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            overridePendingTransition(0, 0);
         } else {
             overridePendingTransition(0, 0);
         }
+    }
+
+    @Override
+    protected void onPause() {
+        overridePendingTransition(0, 0);
+        super.onPause();
+        Log.e("test", getClass().getSimpleName() + " onPause:" + getWindow().getDecorView().getVisibility()
+                + ":" + getWindow().findViewById(android.R.id.content).getVisibility());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e("test", getClass().getSimpleName() + " onResume:" + getWindow().getDecorView().getVisibility()
+                + ":" + getWindow().findViewById(android.R.id.content).getVisibility());
+    }
+
+    @Override
+    public void startActivity(Intent intent) {
+        super.startActivity(intent);
+        overridePendingTransition(0, 0);
     }
 }
