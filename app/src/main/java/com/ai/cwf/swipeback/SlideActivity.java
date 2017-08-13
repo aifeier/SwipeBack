@@ -53,7 +53,7 @@ public class SlideActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-        getWindow().setEnterTransition(new Slide(Gravity.RIGHT));
+//        getWindow().setEnterTransition(new Slide(Gravity.RIGHT));
         super.onCreate(savedInstanceState);
         /**
          * 把当前Activity加到列表里面
@@ -62,10 +62,10 @@ public class SlideActivity extends AppCompatActivity {
         initScrollBack();
     }
 
-    @Override
-    public void startActivity(Intent intent) {
-        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-    }
+//    @Override
+//    public void startActivity(Intent intent) {
+//        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+//    }
 
     /**
      * 初始化左滑退出功能

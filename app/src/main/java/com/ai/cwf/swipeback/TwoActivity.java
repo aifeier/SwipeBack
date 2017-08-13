@@ -5,10 +5,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.ai.cwf.swipeback.swipeback.SwipeBackActivity;
 import com.bumptech.glide.Glide;
 
-public class TwoActivity extends SwipeBackActivity {
+public class TwoActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
