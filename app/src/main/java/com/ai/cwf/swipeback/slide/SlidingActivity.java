@@ -14,6 +14,7 @@ public abstract class SlidingActivity extends AppCompatActivity {
         }
     }
 
+    //是否使用右滑关闭
     protected boolean enableSliding() {
         return true;
     }

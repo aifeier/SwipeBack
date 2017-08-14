@@ -103,7 +103,13 @@ public class SlidingLayout extends FrameLayout {
             @Override
             public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
                 // 记录滑动速度，用于抬起手指时计算滚回去还是滚出去
-                slideSpeed = distanceX;
+                //slideSpeed > 0 向左滑动
+                // slideSpeed < 0 右滑动  移动速度大于5就认为是快速滑动，
+                if (distanceX < 0)
+                    slideSpeed = Math.abs(distanceX);
+                else {
+                    slideSpeed = 0;
+                }
                 return true;
             }
 
@@ -122,6 +128,13 @@ public class SlidingLayout extends FrameLayout {
                 return false;
             }
         });
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (null != mGDetector)
+            mGDetector.onTouchEvent(ev);
+        return super.dispatchTouchEvent(ev);
     }
 
     @Override
@@ -189,8 +202,8 @@ public class SlidingLayout extends FrameLayout {
             case MotionEvent.ACTION_UP:
                 isConsumed = false;
                 mTouchDownX = mLastTouchX = mLastTouchY = 0;
-                // 根据手指释放时的位置决定回弹还是关闭
-                if (-getScrollX() < getWidth() / 2) {
+                // 根据手指释放时的位置决定回弹还是关闭 ,速度小于5并且没有超过屏幕1/3，则不关闭
+                if (slideSpeed < 5 && -getScrollX() < getWidth() / 3) {
                     scrollBack();
                 } else {
                     scrollClose();
