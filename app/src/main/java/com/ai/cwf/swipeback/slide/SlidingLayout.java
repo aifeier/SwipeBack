@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -19,7 +20,7 @@ import com.ai.cwf.swipeback.R;
  */
 public class SlidingLayout extends FrameLayout {
     // 页面边缘阴影的宽度默认值
-    private static final int SHADOW_WIDTH = 16;
+    private int SHADOW_WIDTH_DEFAULT;
     private Activity mActivity;
     private Scroller mScroller;
     // 页面边缘的阴影图
@@ -58,9 +59,13 @@ public class SlidingLayout extends FrameLayout {
 
     private void initView(Context context) {
         mScroller = new Scroller(context);
-        mLeftShadow = getResources().getDrawable(R.drawable.left_shadow);
-        int density = (int) getResources().getDisplayMetrics().density;
-        mShadowWidth = SHADOW_WIDTH * density;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mLeftShadow = getResources().getDrawable(R.drawable.shadow_left, null);
+        } else {
+            mLeftShadow = getResources().getDrawable(R.drawable.shadow_left);
+        }
+        SHADOW_WIDTH_DEFAULT = 10 * (int) getResources().getDisplayMetrics().density;
+        mShadowWidth = SHADOW_WIDTH_DEFAULT;
     }
 
     /**
@@ -200,13 +205,15 @@ public class SlidingLayout extends FrameLayout {
                 mLastTouchY = y;
                 break;
             case MotionEvent.ACTION_UP:
-                isConsumed = false;
                 mTouchDownX = mLastTouchX = mLastTouchY = 0;
                 // 根据手指释放时的位置决定回弹还是关闭 ,速度小于5并且没有超过屏幕1/3，则不关闭
-                if (slideSpeed < 5 && -getScrollX() < getWidth() / 3) {
-                    scrollBack();
-                } else {
-                    scrollClose();
+                if (isConsumed) {
+                    if (slideSpeed < 5 && -getScrollX() < getWidth() / 3) {
+                        scrollBack();
+                    } else {
+                        scrollClose();
+                    }
+                    isConsumed = false;
                 }
                 break;
         }
